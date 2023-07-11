@@ -56,36 +56,21 @@ class LoginBotHiKenpo:
         data = {'message': notification_message}
         requests.post(line_notify_api, headers = headers, data = data)
 
-
-
-    # processing failured :「500　501 サーバ負荷が掛かりすぎているためページがひらけない」表示が出現するため。
+    
     def login(self, url):
         self.driver.get(url)
         wait = WebDriverWait(self.driver, self.wtime)
-        time.sleep(random.randint(min_sleeptime, max_sleeptime))
-        #testing
-        # self.driver.set_window_size('1200', '1000')
-        # self.driver.get(r'https://auth.7id.omni7.jp/login-id/input?sitecd=0001&amp;r_url=https%3A%2F%2F7net.omni7.jp%2Ftop%2F')
-
+        
         wait.until(EC.visibility_of_all_elements_located)
         time.sleep(random.randint(min_sleeptime, max_sleeptime))
-        # submit id
-        # element_id = self.driver.find_element_by_css_selector('.form-group-type01')
-
-
-        # element_id = self.driver.find_element_by_xpath('//*[@id="input-01"]')
-        # element_id.send_keys(self.id)
+        
         element_id_box = self.driver.find_element_by_id('loginId')
         element_id_box.send_keys(self.id)
-
         element_pw_box = self.driver.find_element_by_id('loginPW')
         element_pw_box.send_keys(self.pw)
 
-        # wait.until(EC.visibility_of_all_elements_located)
         time.sleep(random.randint(min_sleeptime, max_sleeptime))
-        # element_login_btn = self.driver.find_element_by_css_selector('span.button__inner')
-        # element_pw_btn.click()
-
+        
         element_login_btn = self.driver.find_element_by_xpath('//*[@id="mainDiv"]/div[2]/div[3]/button[2]')
         element_login_btn.click()
 
@@ -101,6 +86,5 @@ class LoginBotHiKenpo:
 
 model = LoginBotHiKenpo(id=LoginInfo.ID, pw=LoginInfo.PW)
 model.login(URL)
-# model.time_test()
-# model.login()
+
 model.quit()
