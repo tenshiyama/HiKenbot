@@ -4,6 +4,7 @@ import chromedriver_binary # 必須
 import warnings
 import random
 import requests
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
@@ -74,10 +75,17 @@ class LoginBotHiKenpo:
         element_login_btn = self.driver.find_element_by_xpath('//*[@id="mainDiv"]/div[2]/div[3]/button[2]')
         element_login_btn.click()
 
-        if line_notification_flag:
-            self.send_line_notify(LineNotifyToken.TOKEN, 'MY HEALTH WEB にログインしました。at:'+ str(datetime.datetime.now()))
-
         time.sleep(10)
+    
+        point_box = self.driver.page_source
+        soup = BeautifulSoup(point_box, 'html.parser')
+        point_value = soup.find_all('span', class_='sp_point2')
+        point = [value.text.strip() for value in point_value]
+
+        if line_notification_flag:
+            self.send_line_notify(LineNotifyToken.TOKEN, '保有ポイント:' + str(point[0]) + 't, ### MY HEALTH WEB にログインしました。at:'+ str(datetime.datetime.now()))
+
+
 
     def quit(self):
         self.driver.quit()
